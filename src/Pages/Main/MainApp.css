@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+p{
+    margin: 0;
+}
+.bg-1, .bg-2{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+}
+.middle-section{
+    overflow-y: scroll;
+    overflow: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+    scroll-snap-type: y mandatory;
+}
+.middle-section > div {
+    scroll-snap-align: start; /* Snap each div to the start of the container */
+}
+/* Hide scrollbar for IE, Edge */
+.middle-section::-webkit-scrollbar {
+    display: none;
+}
+.bg-1{
+    background-color: #092541;
+    z-index: 1;
+}
+.bg-2{
+    background-color: #040E18;
+    z-index: 2;
+}
+.error-container{
+    z-index: 100;
+    width: 100vw;
+}
+.error-container *{
+    background-color: #092541;
+    padding: 10px;
+    color: rgb(192, 56, 56);
+    font-size: 1rem;
+    border-radius: 0.4rem;
+    position: relative;
+    animation: error 4s ease-in-out;
+    opacity: 0;
+}
+@media (max-width: 1050px) {
+    .error-container *{
+        font-size: 0.7rem;
+    }
+}
+@media (max-width: 750px) {
+    .error-container *{
+        font-size: 0.6rem;
+    }
+}
+@media (max-width: 550px) {
+    .error-container *{
+        font-size: 0.5rem;
+    }
+}
+@keyframes error {
+    0%{
+        opacity: 0;
+        transform: translateY(-2rem);
+    }
+    20%{
+        opacity: 100;
+        transform: translateY(1.5rem);
+    }
+    80%{
+        opacity: 100;
+        transform: translateY(1.5rem);
+    }
+    100%{
+        opacity: 0;
+        transform: translateY(-2rem);
+    }
+}
+.mainapp{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+    color: white;
+    padding: 40px;
+}
+.hour-details img{
+    height: 30%;
+}
+.lefttab, .right-section, .cities-list{
+    background-color: #202B3C;
+
+}
+.tab-active{
+    background-color: rgba(37, 149, 248, 0.1); 
+}
+.lefttab{
+    width: 140px;
+}
+.logo{
+    width: 60px;
+    margin-bottom: 40px;
+    height: auto;
+    cursor: pointer;
+}
+.main-data{
+    height: 100%;
+}
+.settings, .cities, .weather{ 
+    /* padding: 10px; */
+    margin-bottom: 16px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 80%;
+    /* height: 70%; */
+    padding: 12px 0;
+    font-weight: 400;
+}
+.settings img, .cities img, .weather img{
+    width: 16px;
+    margin-bottom: 4px
+}
+.search{
+    width: 100%;
+    padding: 12px 30px;
+    border-radius: 2px;
+    background-color: #202B3C;
+    border: none;
+    outline: none;
+    color: #f4f8ff;
+}
+.hour-forcast, .air-conditions{
+    width: 100%;
+    padding: 0 30px;
+    background-color: #202B3C;
+
+}
+.right-section{
+    width: 100%;
+    margin-top: 23vh;
+}
+.main-city{
+    font-size: 64px;
+}
+.feeltemp{
+    font-size: 12px;
+}
+.maintemp{
+    font-size: 28px;
+}
+.air-condition-details{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    row-gap: 44px;
+}
+@media (max-width: 1100px) {
+    .mainapp{
+        padding: 24px;
+    }
+    .lefttab{
+        padding: 8px;
+    }
+    .settings, .cities, .weather{
+        font-size: 12px;
+        width: 100%;
+        padding: 8px 6px;
+    }
+    .logo{
+        margin-bottom: 50px;
+        width: 56px;
+    }
+    .settings img, .cities img, .weather img{
+        width: 14px;
+    }
+.forcast-details{
+    flex-wrap: wrap;
+}
+.main-weather-icon{
+    height: 68px;
+}
+.main-city{
+    font-size: 42px;
+}
+.hour-forcast, .air-conditions, .right-section{
+    padding: 16px;
+}
+.day-forecast-weather{
+    width: 22px !important; 
+}
+.days-forecast-details .day{
+    font-size: 12px;
+    text-wrap: nowrap;
+    white-space: nowrap;
+}
+}
+@media (max-width: 1200px) {
+    .settings, .cities, .weather{
+        font-size: 14px;
+    }
+    .settings img, .cities img, .weather img {
+        width: 14px;
+    }
+    
+}
+
+@media (max-width: 780px) {
+    .settings, .cities, .weather{
+        font-size: 12px;
+    }
+    .settings img, .cities img, .weather img {
+        width: 12px;
+    }
+    .logo{
+        margin-bottom: 40px;
+        width: 52px;
+    }
+}
+@media (max-width: 700px) {
+    .main-city{
+        font-size: 32px
+    }
+    .main-weather-icon{
+        height: 48px;
+    }
+    .feeltemp{
+        font-size: 10px;
+    }
+    .hour-details .temp, .hour-details .hour{
+    font-size: 12px;
+    }
+    .hour-details img{
+        width: 38px;
+    }
+    .hour-details{
+        padding: 8px
+    }
+    .real-feel-temp, .wind-speed, .pop{
+        font-size: 16px !important;
+    }
+    .days-forecast-details .day , .daily-weather{
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 555px) {
+    .lefttab{
+        display: none !important;
+    }
+    .mainapp{
+        align-items: center;
+        flex-direction: column;
+        overflow-y: scroll;
+        flex: none;
+    }
+    .middle-section, .right-section{
+        flex: none !important;
+        width: 100%;
+    }
+    .right-section{
+        margin-top: 0;
+        height: clamp(200px, 40vh, 300px);
+    }
+
+}
