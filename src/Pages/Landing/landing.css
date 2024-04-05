@@ -68,3 +68,51 @@
     }
     
 }
+@media (max-width: 550px) {
+    .landingPage{
+        flex-direction: column;
+        align-items: center;
+        padding: 16vh 0;
+        overflow: hidden;
+    }
+    .landing-left{
+         width: auto;
+         height: auto;
+         padding: 30px 68px;
+         gap: 12px;
+    }
+    .landing-left img, .landing-snow, .landing-sun{
+        height: 24px;
+    }
+    .landing-right{
+        gap: 20px;
+    }
+    .landing-sun-snow{
+        gap: 8px !important;
+    }
+    .landing-logo{
+        width: 50px;
+        height: 50px;
+    }
+    .landing-logo img{
+        width: 26px;
+    }
+    .skycast-logo h1{
+        font-size: 42px;
+    }
+    .get-started-btn{
+        padding: 10px 12px !important;
+    }
+    .get-started-btn span{
+        display: none;
+    }
+    .get-started-btn svg{
+        transform: rotate(90deg);
+    }
+}
+@media (max-height: 700px) {
+    .landingPage{
+        padding: 10vh 8vw;
+    }
+}
+

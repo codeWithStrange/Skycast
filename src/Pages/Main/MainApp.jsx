@@ -1,3 +1,5 @@
+//If you see this comment it means ive not cleaned up properly, so be careful what you modify. Thanks
+
 import React, { useState, useEffect } from 'react';
 import './MainApp.css';
 import { mainAppLogo, gear, water, map, freezing, cloudy, hotRainy, sunnyCloudyRainy, sunnyCloudy, windyCloudy, windySunny, rainy, rainyThunder, sunny, hazy, tornado, sandy, smoky } from './svg';
@@ -9,29 +11,44 @@ const MainApp = () => {
   //If you understand this code, you sef be boss.
   const [city, setCity] = useState('');
   const [weatherData, setWeatherData] = useState(null);
-  const [listCities, setListCities] = useState(false);
-  const [citySuggestions, setCitySuggestions] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const apiKey = '155a8e5c88f4fb24ec048dca2d55e584';
-  const geoUsername = 'strangeop99'
+  
+  const [loadingScreens, setLoadingScreens] = useState({
+    bg1: true,
+    bg2: false,
+    loadingAnimation: false,
+    loadMain : false,
+    loadMainTrigger: false,
+    searchLoad : false
+  });
+
+  const [errors, setErrors] = useState({
+    internet : false,
+    cityName : false,
+  })
 
 
-  useEffect(() => {
-    fetch(`http://api.geonames.org/citiesJSON?username=${geoUsername}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setListCities(data.geonames);
-        console.log(listCities);
-      })
-      .catch(error => {
-        console.log(error.message);
-      });
-  }, []);
+
+
+
+  useEffect(() =>{
+    if(loadingScreens.bg1 && !loadingScreens.loadingAnimation){
+
+    }
+      const timeout = setTimeout(() =>{
+          setLoadingScreens({
+            ...loadingScreens,
+            loadingAnimation: true
+          })
+      }, 1000);
+      return () =>{
+        clearTimeout(timeout);
+      }
+  },[])
+
+
+
 
 
   const handleInputChange = (e) => {
@@ -103,33 +120,34 @@ const MainApp = () => {
     return `${hours}:${minutes} ${hours < 12 ? 'AM' : 'PM'}`;
   }
 
-  function getMostCommonWeatherForDays(forecasts) {
+  function getMostCommonWeatherForDays(weatherData) {
     const dailyForecasts = {};
-    forecasts.forEach(forecast => {
-      const date = new Date(forecast.dt * 1000).toLocaleDateString(undefined, { weekday: 'short', day: '2-digit', month: '2-digit' });
-      const weatherMain = forecast.weather[0].main;
-
-      if (!dailyForecasts[date]) {
-        dailyForecasts[date] = {};
+    if (weatherData) {
+      weatherData.list.forEach(forecast => {
+        const date = new Date(forecast.dt * 1000).toLocaleDateString(undefined, { weekday: 'short', day: '2-digit', month: '2-digit' });
+        const weatherMain = forecast.weather[0].main;
+  
+        if (!dailyForecasts[date]) {
+          dailyForecasts[date] = {};
+        }
+  
+        if (!dailyForecasts[date][weatherMain]) {
+          dailyForecasts[date][weatherMain] = 0;
+        }
+  
+        dailyForecasts[date][weatherMain]++;
+      });
+  
+      const mostCommonWeatherForDays = {};
+      for (const date in dailyForecasts) {
+        const weatherCounts = dailyForecasts[date];
+        const mostCommonWeather = Object.keys(weatherCounts).reduce((a, b) => weatherCounts[a] > weatherCounts[b] ? a : b);
+        mostCommonWeatherForDays[date] = mostCommonWeather;
       }
-
-      if (!dailyForecasts[date][weatherMain]) {
-        dailyForecasts[date][weatherMain] = 0;
-      }
-
-      dailyForecasts[date][weatherMain]++;
-    });
-
-    const mostCommonWeatherForDays = {};
-    for (const date in dailyForecasts) {
-      const weatherCounts = dailyForecasts[date];
-      const mostCommonWeather = Object.keys(weatherCounts).reduce((a, b) => weatherCounts[a] > weatherCounts[b] ? a : b);
-      mostCommonWeatherForDays[date] = mostCommonWeather;
+  
+      return mostCommonWeatherForDays;
     }
-
-    return mostCommonWeatherForDays;
   }
-
 //For the handle search suggestion function, fix it if you need it
   // const fetchCitySuggestions = (query) => {
   //   fetch(`http://api.geonames.org/searchJSON?q=${query}&maxRows=5&username=demo`)
@@ -158,9 +176,40 @@ const MainApp = () => {
       })
       .then(data => {
         setWeatherData(data);
-        console.log(data);
+        setErrors({
+          ...errors,
+           cityName: false,
+           internet: false,
+          
+        })
+
+        setLoadingScreens({
+          ...loadingScreens,
+          searchLoad : false,
+        })
+
+        console.log('off')
       })
       .catch(error => {
+        setLoadingScreens({
+          ...loadingScreens,
+          searchLoad : false,
+        })
+        if (error.message === 'City not found') {
+          setIncorrectCityName(true);
+          setErrors({
+            ...errors,
+            cityName : true
+          })
+        } else {
+          setErrors({
+            ...errors,
+            internet : true,
+            cityName: false
+          })
+          // setIncorrectCityName(false);
+          // setNetworkError(true);
+        }
         console.log(error.message);
       });
   };
@@ -189,9 +238,18 @@ const MainApp = () => {
           })
           .then(data => {
             setWeatherData(data);
+            setLoadingScreens({
+              ...loadingScreens,
+              bg2: true,
+              loadingAnimation: false,
+              loadMain : true,
+            })
+            
+           
           })
           .catch(error => {
-            console.log(error.message);
+            // Show the appropriate error component based on the type of error
+          
           });
       }, error => {
         console.error('Error getting location:', error);
@@ -201,14 +259,9 @@ const MainApp = () => {
     }
   }, []);
   
-
-  if (!weatherData) return null;
-
-  const mostCommonWeatherForDays = getMostCommonWeatherForDays(weatherData.list);
-
   return (
     <>
-      <div className='mainapp d-flex gap-3'>
+     {loadingScreens.loadMain && <div className='mainapp d-flex gap-3'>
         <div className="lefttab d-flex align-items-center flex-column flex-1 rounded-4 py-4">
           <img className='logo' src={mainAppLogo} alt="" />
           <div className="weather d-flex justify-content-center align-items-center flex-column tab-active">
@@ -226,7 +279,11 @@ const MainApp = () => {
         </div>
       <div className="middle-section d-flex flex-column flex-8">
       <div className="top-middle d-flex flex-column gap-3">
-                  <input
+               <div className="search-things position-relative">
+               {loadingScreens.searchLoad&& <div className="search-loading-container">
+                 <div className="search-loading"></div>
+                </div>}
+               <input
               type='search'
               className="search rounded-5"
               placeholder='Search by cities'
@@ -236,9 +293,20 @@ const MainApp = () => {
                 if (e.key === 'Enter') {
                   // handleSearch();
                   fetchWeatherData(city);
+                  setErrors({
+                    ...errors,
+                    internet : false,
+                    cityName : false,
+                  })
+                  setLoadingScreens({
+                    ...loadingScreens,
+                    searchLoad : true,
+                  })
+                  console.log('on')
                 }
               }}
             />
+               </div>
     <div className="main-data d-flex justify-content-between p-3">
       <div className="left-main d-flex flex-column justify-content-between ">
         <div className="left-top">
@@ -306,7 +374,7 @@ const MainApp = () => {
         <div className="right-section d-flex flex-column flex-3 rounded-3 p-3">
           <h6 className='fs-14 fw-medium'>DAILY FORECAST</h6>
           <div className="d-flex flex-column justify-content-between flex-1 p-2">
-            {Object.entries(mostCommonWeatherForDays).map(([date, weather]) => (
+            {Object.entries(getMostCommonWeatherForDays(weatherData)).map(([date, weather]) => (
               <div key={date} className="days-forecast-details d-flex justify-content-between align-items-center gap-2">
                 <p className="day fs-13">{date}</p>
                 <div className='d-flex align-items-center gap-2'>
@@ -317,13 +385,13 @@ const MainApp = () => {
             ))}
           </div>
         </div>
-      </div>
+      </div>}
       <div className='error-container d-flex align-items-center justify-content-center position-fixed flex-column gap-2'> 
-      <p className="city-name-error d-inline">Please type the city name correctly</p>
-      <p className="internet-error d-inline">Please check your internet</p>
+      {errors.internet&&<p className="city-name-error d-inline">Please type the city name correctly or check your internet</p>}
       </div>
-      <div className="bg-1"></div>
-      <div className="bg-2"></div>
+      {loadingScreens.bg1 && <div className="bg-1"></div>}
+      {loadingScreens.bg2 && <div className="bg-2"></div>}
+      {loadingScreens.loadingAnimation && <div className="loading-container"><div className="loading-animation"></div></div>}
     </>
   );
 }

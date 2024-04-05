@@ -9,11 +9,7 @@
 p{
     margin: 0;
 }
-.bg-1, .bg-2{
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-}
+
 .middle-section{
     overflow-y: scroll;
     overflow: auto;
@@ -27,14 +23,6 @@ p{
 /* Hide scrollbar for IE, Edge */
 .middle-section::-webkit-scrollbar {
     display: none;
-}
-.bg-1{
-    background-color: #092541;
-    z-index: 1;
-}
-.bg-2{
-    background-color: #040E18;
-    z-index: 2;
 }
 .error-container{
     z-index: 100;
@@ -272,4 +260,100 @@ p{
         height: clamp(200px, 40vh, 300px);
     }
 
+}
+/* Loading Annimation */
+
+
+.bg-1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #202B3C; /* Adjust color as needed */
+    animation: bg-loading 0.5s ease-in-out;
+}
+
+.bg-2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #040E18; /* Adjust color as needed */
+    animation: bg-loading 0.8s ease-in-out;
+}
+
+
+@keyframes bg-loading {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+@media (max-width: 550px) {
+    @keyframes bg-loading {
+        0% {
+            transform: translateY(-100%);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+}
+
+.mainapp {
+    animation: main-app-loading 0.6s ease-in;
+}
+@keyframes main-app-loading {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.loading-container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loading-animation {
+    border: 4px solid #202B3C; /* Light grey */
+    border-top: 4px solid #004991; /* Blue */
+    border-right: 4px solid #004991; /* Blue */
+    border-left: 4px solid #004991; /* Blue */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1.3s linear infinite;
+    margin: 20px auto;
+    position: fixed;
+    z-index: 7000000000000000000;
+}
+.search-loading-container {
+    top: 50%;
+    transform: translateY(-50%);
+    right: 60px;
+    position: absolute;
+    height: 40%;
+    aspect-ratio: 1/1;
+}
+.search-loading{
+    border: 2px solid #202B3C; /* Light grey */
+    height: 100%;
+    border-top: 2px solid #004991; /* Blue */
+    border-right: 2px solid #004991; /* Blue */
+    border-left: 2px solid #004991;
+    border-radius: 50%;
+    animation: spin 1.3s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
