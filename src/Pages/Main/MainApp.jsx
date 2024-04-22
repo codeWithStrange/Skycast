@@ -1,5 +1,5 @@
 //If you see this comment it means ive not cleaned up properly, so be careful what you modify. Thanks
-
+//Shit doesnt work in production loooolllllllllll
 import React, { useState, useEffect } from 'react';
 import './MainApp.css';
 import { mainAppLogo, gear, water, map, freezing, cloudy, hotRainy, sunnyCloudyRainy, sunnyCloudy, windyCloudy, windySunny, rainy, rainyThunder, sunny, hazy, tornado, sandy, smoky } from './svg';
